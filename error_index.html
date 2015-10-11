@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Error: you tried to create a new stream</h3>
+<h3> whose name is same as an</h3>
+<h3> existing stream; operation did not complete.</h3>
+<td><img src="http://technothlon.techniche.org/error/error.png"></td>
+
+<a href="{{ url|safe }}">Logout</a>
+{% endblock %}

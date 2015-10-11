@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+     {% block search %} <td><b>Search</b></td>{% endblock %}
+
+
+{% block content %}
+
+<form action="/showsearch" method="get">
+        <input type="search" name="searchStream" placeholder="Lucknow"></br>
+        <input type="submit" value="Search">
+</form>
+
+{% for stream in stream_list %}
+           <table border="1" style="width:100%">
+
+
+               <td><div style = "position:relative">
+                   <a href = "stream.url">
+                         {% if stream.numberofpictures > 0 %}
+                       <img src="img?img_id=key_list[loop.index]" >
+                       {%else%}
+                       <img src="http://www.estatesale.com/img/no_image.gif" >
+                       {% endif %}
+                       <div style = "position: absolute; left:150px; top:20px"></div>
+                   </a>
+               </div>
+               </td>
+
+           </table>
+{% endfor %}
+
+
+{% endblock %}

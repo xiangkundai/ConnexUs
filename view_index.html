@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+     {% block view %} <td><b>View</b></td>{% endblock %}
+
+
+{% block content %}
+<h2>View All Streams</h2>
+<table style = "width:100%">
+
+
+    {% for stream in all_streams%}
+
+          {% if stream %}
+            {% if loop.index0 %4 == 0 %}
+            <tr>
+                 {% endif %}
+
+               <td>
+                    <figcaption>{{stream.name}}</figcaption>
+                    <a href="{{stream.url}}">
+                    <img src="{{stream.coverurl}}" alt="Cover Image" style="width:304px;height:228px;">
+                    </a>
+               </td>
+                {% if loop.index0 %4 == 3 %}
+                    </tr>
+                {% endif %}
+
+          {% endif %}
+        {% endfor %}
+      </table>
+
+
+{% endblock %}

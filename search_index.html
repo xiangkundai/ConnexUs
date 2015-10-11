@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+     {% block search %} <td><b>Search</b></td>{% endblock %}
+
+
+{% block content %}
+
+<form action="/showsearch" method="get">
+        <input type="search" name="searchStream" placeholder="Lucknow"></br>
+        <input type="submit" value="Search">
+</form>
+
+<p>{{showNum}} results for <b>{{stream_name}}</b>,<br>  click on image to view stream</p>
+
+{% endblock %}

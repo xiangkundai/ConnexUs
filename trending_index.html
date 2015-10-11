@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+     {% block trending %} <td><b>Trending</b></td>{% endblock %}
+
+
+{% block content %}
+	<h2>Top 3 Trending Streams</h2>
+<table style = "width:70%">
+        {% for stream in stream_list%}
+
+        <td><div style = "position:relative">
+            <a href="{{stream.url}}"><img src="{{stream.coverurl}}" >
+                <div style = "position: absolute; left:0px; top:0px">{{stream.name}}</div>
+            </a>
+        </div>
+            <div>{{count_list[loop.index0].numbers}} views in the past hour.</div>
+        </td>
+        {% endfor %}
+    </table>
+<form action="/update" method="post">
+    <input type="radio" name="frequency" value="no">No reports<br>
+    <input type="radio" name="frequency" value="5m">Every 5 minutes<br>
+    <input type="radio" name="frequency" value="1h">Every 1 hour<br>
+    <input type="radio" name="frequency" value="1d">Every day<br>
+    <input type="submit" value="Update rate">
+</form>
+{% endblock %}

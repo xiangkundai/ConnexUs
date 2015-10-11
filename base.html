@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Connexus</title>
+    {% block css %}<link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />{% endblock %}
+
+</head>
+<body>
+<div id="wrapper">
+	<div id="header">
+		<h1>Connex.us</h1>
+
+	<table style="width:70%">
+		<tr>
+			{% block manage %}<td><a href="management">Manage</a></td>{% endblock %}
+			{% block create %}<td><a href="createstream">Create</a></td>{% endblock %}
+			{% block view %}<td><a href="viewallstreams">View</a></td>{% endblock %}
+    		{% block search %}<td><a href="search">Search</a></td>{% endblock %}
+    		{% block trending %}<td><a href="trending">Trending</a></td>{% endblock %}
+    		{% block social%}<td><a href="social">Social</a></td>{% endblock %}
+  		</tr>
+  	</table>
+	</div>
+
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        &copy; Copyright 2015 by Kevin & Wenwen</a>.
+    </div>
+
+</div>
+
+
+</body>
+</html>

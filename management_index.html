@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+     {% block manage %} <td><b>Manage</b></td>{% endblock %}
+
+
+{% block content %}
+
+  <h2>Streams I own</h2>
+<form action="/management" method="get">
+    <table border="1" style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>Last New Picture</th>
+        <th>Number of Pictures</th>
+        <th>Delete</th>
+      </tr>
+
+
+        {% for stream_1 in streams_1%}
+           <tr>
+          {% if stream_1 %}
+            <td><a href="{{stream_1.url}}">{{stream_1.name}}</a></td>
+            <td>{{stream_1.lastnewdate}}</td>
+            <td>{{stream_1.numberofpictures}}</td>
+            <td><input type="checkbox" name="status" value="{{stream_1.name}}"></td>
+          {% endif %}
+           </tr>
+        {% endfor %}
+
+
+    </table>
+
+           <input type="submit" value="Delete">
+</form>
+
+
+
+  <h2>Streams I subscribe to</h2>
+<form action="/management" method="get">
+  <table border="1" style="width:100%">
+      <tr>
+        <th>Name</th>
+        <th>Last New Picture</th>
+        <th>Number of Pictures</th>
+          <th>Views</th>
+        <th>Delete</th>
+      </tr>
+
+        {% for stream_2 in streams_2%}
+         <tr>
+            {% if stream_2 %}
+
+                <td><a href="{{stream_2.guesturl}}">{{stream_2.name}}</a></td>
+                <td>{{stream_2.lastnewdate}}</td>
+                <td>{{stream_2.numberofpictures}}</td>
+                <td>{{count_list[loop.index0]}}</td>
+                <td><input type="checkbox" name="status1" value="{{stream_2.name}}"></td>
+
+            {% endif %}
+        </tr>
+        {% endfor %}
+
+  </table>
+
+             <input type="submit" value="Delete">
+  </form>
+
+<a href="{{ url|safe }}">Logout</a>
+{% endblock %}

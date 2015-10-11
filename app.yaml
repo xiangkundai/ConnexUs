@@ -1,0 +1,91 @@
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+#- url: /coverimage.*
+ # static_files: mqq.jpg
+  #upload: coverimage
+
+- url: /task
+  script: trending.application
+  #login: required
+
+- url: /clean
+  script: trending.application
+  #login: required
+
+- url: /createstream
+  script: createstream.application
+  login: required
+
+- url: /sign
+  script: createstream.application
+  login: required
+
+- url: /viewallstreams
+  script: view.application
+  login: required
+
+- url: /search
+  script: search.application
+  login: required
+
+- url: /showsearch
+  script: search.application
+  login: required
+
+- url: /error
+  script: error.application
+  login: required
+
+- url: /trending
+  script: trending.application
+  login: required
+
+- url: /update
+  script: trending.application
+  #login: required
+
+- url: /management
+  script: management.application
+
+- url: /delstream
+  script: management.application
+  login: required
+
+- url: /stream.*
+  script: viewsinglestream.application
+  login: required
+
+- url: /upload
+  script: viewsinglestream.application
+  login: required
+
+- url: /showmore.*
+  script: viewsinglestream.application
+  login: required
+
+- url: /delpic
+  script: viewsinglestream.application
+  login: required
+
+- url: /subscribe
+  script: viewsinglestream.application
+
+- url: /img.*
+  script: viewsinglestream.application
+  login: required
+
+- url: /.*
+  script: login.application
+
+
+libraries:
+- name: webapp2
+  version: latest
+- name: PIL
+  version: latest
+- name: jinja2
+  version: latest
