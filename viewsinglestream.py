@@ -46,40 +46,46 @@ class  ViewSinglePage(webapp2.RequestHandler):
 
         pictures=db.GqlQuery("SELECT *FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC LIMIT 3" , db.Key.from_path('Stream',stream_name))
 
-
+        uploadurl = blobstore.create_upload_url('/upload')
         showmoreurl=urllib.urlencode({'showmore': stream.name+"=="+users.get_current_user().nickname()})
         template_values = {
                         'showmoreurl': showmoreurl,
                         'stream_name': stream_name,
                         'pictures':pictures,
-                        'status':status
+                        'status':status,
+                        'uploadurl':uploadurl
                      }
         template = JINJA_ENVIRONMENT.get_template('viewsinglestream_index.html')
         self.response.write(template.render(template_values))
 
-class Image(webapp2.RequestHandler):
+class Image(blobstore_handlers.BlobstoreDownloadHandler):
     def get(self):
         picture = db.get(self.request.get('img_id'))
-        self.response.out.write(picture.image)
+        blob_info = blobstore.BlobInfo.get(picture.imgkey)
+        self.send_blob(blob_info)
 
 
-class Upload(webapp2.RequestHandler):
+
+class Upload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
+        print('1')
         original_url=self.request.headers['Referer']
-        img=self.request.get('file')
-        if len(img) != 0:
+        imgs=self.get_uploads('files[]')
+        if len(imgs) != 0:
             stream_name=re.findall('=(.*)',original_url)[0]
+            print('2')
             if Stream.author==users.get_current_user():
                 stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
-                picture=Picture(parent=db.Key.from_path('Stream',stream_name))
-                stream.lastnewdate=  picture.uploaddate
-                stream.numberofpictures=stream.numberofpictures+1
-                stream.total=stream.total+1
-                picture.id=str(stream.total)
-                img=images.resize(img,300,300)
-                picture.image=db.Blob(img)
-                picture.put()
-
+                for img in imgs:
+                    print('3')
+                    picture=Picture(parent=db.Key.from_path('Stream',stream_name))
+                    stream.lastnewdate=  picture.uploaddate
+                    stream.numberofpictures=stream.numberofpictures+1
+                    stream.total=stream.total+1
+                    #picture.id=str(stream.total)
+                    #img=images.resize(img,300,300)
+                    picture.imgkey=str(img.key())
+                    picture.put()
                 stream.put()
             else:
                 self.response.out.write('<h2 >Action not allowed!</h2>')
@@ -92,7 +98,10 @@ class DeletePictures(webapp2.RequestHandler):
         stream_name=re.findall('=(.*)%3D%3D',original_url)[0]
         stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
         dellsts=self.request.get_all("status")
-        pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 AND id IN :2",db.Key.from_path('Stream',stream_name),dellsts)
+        print dellsts
+        pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 AND imgkey IN :2",db.Key.from_path('Stream',stream_name),dellsts)
+        for picture in pictures:
+            blobstore.delete(picture.imgkey)
         db.delete(pictures)
         stream.numberofpictures=stream.numberofpictures-len(dellsts)
         stream.put()
@@ -152,7 +161,7 @@ class ShowPictures(webapp2.RequestHandler):
         if(users.get_current_user() and stream.author==users.get_current_user()):
             status = (1,1)
             for picture in pictures:
-                infos.append(picture.key(),picture.imgkey,index)
+                infos.append((picture.key(),picture.imgkey,index))
                 index=index+1
                 if(index==4):
                     index = 0
@@ -167,7 +176,7 @@ class ShowPictures(webapp2.RequestHandler):
                 count.put()
                 status = (1,0)
                 for picture in pictures:
-                    infos.append(picture.key(),0,index)
+                    infos.append((picture.key(),0,index))
                     index=index+1
                     if(index==4):
                         index = 0

@@ -10,11 +10,12 @@
 </table>
 <form action="{{showmoreurl}}" ,method="post"><input type="submit" value="More Pictures"></form>
 {% if (status == (1,1))%}
-<form action="/upload" method="post" enctype="multipart/form-data">
-    Upload File: <input type="file"  name="file" ><br>
+<form action="{{uploadurl}}" method="post" class = "dropzone" enctype="multipart/form-data">
+    Upload File: <input type="file"  name="files[]" multiple/><br>
     <input type="submit" name="submit" value="Submit">
 </form>
 {% else %}
 <form action="subscribe" method="post"><input type="submit" value="Subscribe"></form>
 {%endif%}
 {% endblock %}
+

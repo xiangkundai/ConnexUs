@@ -24,7 +24,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class ManagementPage(webapp2.RequestHandler):
     def get(self):
-        print("test")
+        print("test!!")
         dellsts=self.request.get_all("status")
         if (len(dellsts) > 0):
             streams=Stream.query(Stream.name.IN(dellsts), Stream.author==users.get_current_user()).fetch()

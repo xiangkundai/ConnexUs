@@ -4,9 +4,8 @@ api_version: 1
 threadsafe: true
 
 handlers:
-#- url: /coverimage.*
- # static_files: mqq.jpg
-  #upload: coverimage
+- url: /assets
+  static_dir: assets
 
 - url: /task
   script: trending.application
