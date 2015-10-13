@@ -28,6 +28,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
+class UploadUrlHandler(webapp2.RequestHandler):
+    def get(self):
+        upload_url = blobstore.create_upload_url('/upload')
+        self.response.headers['Content-Type'] = 'application/json'
+        self.response.out.write('"' + upload_url + '"')
+        print('uploadurl')
+
+
 class  ViewSinglePage(webapp2.RequestHandler):
     def get(self):
         status = (0,0)
@@ -53,7 +61,7 @@ class  ViewSinglePage(webapp2.RequestHandler):
                         'stream_name': stream_name,
                         'pictures':pictures,
                         'status':status,
-                        'uploadurl':uploadurl
+                       'uploadurl':uploadurl
                      }
         template = JINJA_ENVIRONMENT.get_template('viewsinglestream_index.html')
         self.response.write(template.render(template_values))
@@ -70,10 +78,10 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         print('1')
         original_url=self.request.headers['Referer']
-        imgs=self.get_uploads('files[]')
+        imgs=self.get_uploads()
         if len(imgs) != 0:
             stream_name=re.findall('=(.*)',original_url)[0]
-            print('2')
+            print(len(imgs))
             if Stream.author==users.get_current_user():
                 stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
                 for img in imgs:
@@ -87,9 +95,11 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
                     picture.imgkey=str(img.key())
                     picture.put()
                 stream.put()
+                print('4')
             else:
                 self.response.out.write('<h2 >Action not allowed!</h2>')
-        self.redirect(original_url)
+        print('5')
+        self.redirect('/')
 
 
 class DeletePictures(webapp2.RequestHandler):
@@ -151,6 +161,7 @@ class ShowPictures(webapp2.RequestHandler):
         infos = []
         status = (0,0)
         index=0
+        url = ""
         #Change!# stream=Stream.query(Stream.name==stream_name, Stream.author_name==user_name).fetch()[0]
 
         pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream_name))
@@ -196,4 +207,6 @@ application = webapp2.WSGIApplication([
     ('/subscribe', SubscribeStream),
     ('/img.*', Image),
     ('/stream.*', ViewSinglePage),
+    ('/uploadurlhandler',UploadUrlHandler)
+
 ], debug=True)

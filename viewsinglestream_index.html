@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block content %}
+
+  {% block content %}
 <h2 >{{stream_name}}</h2>
 <table border="1" style="width:100%">
     <tr>
@@ -8,14 +9,58 @@
         {% endfor%}
     </tr>
 </table>
-<form action="{{showmoreurl}}" ,method="post"><input type="submit" value="More Pictures"></form>
+<form action="{{showmoreurl}}" method="get"><input type="submit" value="More Pictures"></form>
 {% if (status == (1,1))%}
-<form action="{{uploadurl}}" method="post" class = "dropzone" enctype="multipart/form-data">
-    Upload File: <input type="file"  name="files[]" multiple/><br>
-    <input type="submit" name="submit" value="Submit">
-</form>
+
+<form action="{{uploadurl}}" class="dropzone" id="my-dropzone" ></form>
+<button id="submit-all">Upload</button>
+<script>
+Dropzone.options.myDropzone = {
+    
+
+
+    autoProcessQueue:false,
+
+    
+    init:function(){
+      var submitButton = document.querySelector("#submit-all")
+
+      myDropzone = this;
+
+      submitButton.addEventListener("click",function(){
+        myDropzone.processQueue();
+      });
+
+
+      this.on("addedfiles",function(){
+        console.log("wenwen'file is added");
+
+      })
+
+      this.on("processing", function(file) {
+          console.log("wenwen's file is processing 1");
+      	$.getJSON('/uploadurlhandler', function(result){
+            console.log(result);
+            myDropzone.options.url = result;
+            console.log("wenwen's file is processing");
+        })
+      });
+
+
+     }
+
+
+    
+  };
+
+
+  </script>
 {% else %}
 <form action="subscribe" method="post"><input type="submit" value="Subscribe"></form>
 {%endif%}
 {% endblock %}
+
+
+
+
 
