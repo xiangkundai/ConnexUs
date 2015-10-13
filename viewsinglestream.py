@@ -54,6 +54,7 @@ class  ViewSinglePage(webapp2.RequestHandler):
 
         pictures=db.GqlQuery("SELECT *FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC LIMIT 3" , db.Key.from_path('Stream',stream_name))
 
+        print pictures[0].imgkey
         uploadurl = blobstore.create_upload_url('/upload')
         showmoreurl=urllib.urlencode({'showmore': stream.name+"=="+users.get_current_user().nickname()})
         template_values = {
@@ -78,28 +79,28 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
     def post(self):
         print('1')
         original_url=self.request.headers['Referer']
-        imgs=self.get_uploads()
-        if len(imgs) != 0:
-            stream_name=re.findall('=(.*)',original_url)[0]
-            print(len(imgs))
-            if Stream.author==users.get_current_user():
-                stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
-                for img in imgs:
-                    print('3')
-                    picture=Picture(parent=db.Key.from_path('Stream',stream_name))
-                    stream.lastnewdate=  picture.uploaddate
-                    stream.numberofpictures=stream.numberofpictures+1
-                    stream.total=stream.total+1
-                    #picture.id=str(stream.total)
-                    #img=images.resize(img,300,300)
-                    picture.imgkey=str(img.key())
-                    picture.put()
-                stream.put()
-                print('4')
-            else:
-                self.response.out.write('<h2 >Action not allowed!</h2>')
+        img=self.get_uploads()[0]
+
+        stream_name=re.findall('=(.*)',original_url)[0]
+       # print(len(img))
+        if Stream.author==users.get_current_user():
+            stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
+            #   for img in imgs:
+            print('3')
+            picture=Picture(parent=db.Key.from_path('Stream',stream_name))
+            stream.lastnewdate=  picture.uploaddate
+            stream.numberofpictures=stream.numberofpictures+1
+            stream.total=stream.total+1
+            #picture.id=str(stream.total)
+            #img=images.resize(img,300,300)
+            picture.imgkey=str(img.key())
+            picture.put()
+            stream.put()
+            print('4')
+        else:
+            self.response.out.write('<h2 >Action not allowed!</h2>')
         print('5')
-        self.redirect('/')
+        self.redirect(original_url)
 
 
 class DeletePictures(webapp2.RequestHandler):
