@@ -90,9 +90,48 @@
 			{% block manage %}<td><a href="management">Manage</a></td>{% endblock %}
 			{% block create %}<td><a href="createstream">Create</a></td>{% endblock %}
 			{% block view %}<td><a href="viewallstreams">View</a></td>{% endblock %}
-    		{% block search %}<td><a href="search">Search</a></td>{% endblock %}
+
     		{% block trending %}<td><a href="trending">Trending</a></td>{% endblock %}
     		{% block social%}<td><a href="social">Social</a></td>{% endblock %}
+          <td><form action="/showsearch" method="get">
+    <div class="ui-widget">
+        <input type="search" name="searchStream" placeholder="Lucknow" id="search_word" ></br>
+        <input type="submit" value="Search">
+    </div>
+</form>
+<script>
+
+ $(document).ready(function (){
+
+ $.getJSON("/autocompletelist",function(data){
+
+
+
+          $( "#search_word" ).autocomplete({
+              source: function( request, response ) {
+          var matcher = new RegExp(request.term );
+          var i = 0;
+          response( $.grep(data, function( item ){
+
+              if (matcher.test(item))
+                i = i +1;
+              if (i<21&& matcher.test(item))
+                return true;
+              else
+                return false;
+          }) );
+      }
+});
+ });
+
+
+ });
+
+
+
+
+  </script>
+</td>
   		</tr>
   	</table>
 	</div>
