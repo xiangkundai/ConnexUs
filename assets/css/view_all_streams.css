@@ -1,0 +1,15 @@
+body  {
+    background-image: url('../images/background1.jpg');
+}
+h1 {
+    color:blue;
+    font-family:verdana;
+    font-size:300%;
+}
+
+#images {
+    white-space: nowrap;
+}
+
+
+
