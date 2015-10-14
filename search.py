@@ -52,6 +52,7 @@ class autoCompleteList(webapp2.RequestHandler):
            # print (name_set.name)
        # return_dic = {"nameList" , return_list}
         self.response.headers['Content-Type'] = 'application/json'
+        return_list.sort()
         return_list = json.dumps(return_list)
         self.response.out.write(return_list)
 
