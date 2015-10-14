@@ -11,6 +11,12 @@ handlers:
   script: trending.application
   #login: required
 
+- url: /autocomplete
+  script: search.application
+
+- url: /autocompletelist
+  script: search.application
+
 - url: /clean
   script: trending.application
   #login: required

@@ -10,6 +10,7 @@
         <form action="delpic" method="post">
             <div class="image-row">
                     <div class="image-set">
+                        <table>
             {%for info in infos%}
                 {%if(info[2]==0)%}
                         <tr>
@@ -19,11 +20,12 @@
                     <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
                     <input type="checkbox" name="status", value="{{info[1]}}">
                 </td>
+
                 {%if(info[2]==3)%}
                     </tr>
                 {%endif%}
 
-            {%endfor%}
+            {%endfor%}</table>
                     </div>
              </div>
 
@@ -33,6 +35,7 @@
         {%else%}
                     <div class="image-row">
                     <div class="image-set">
+                        <table>
         {%for info in infos%}
             {%if(info[2]==0)%}
                 <tr>
@@ -43,7 +46,7 @@
             {%if(info[2]==3)%}
                 </tr>
             {%endif%}
-        {%endfor%}
+        {%endfor%}</table>
                 </div>
              </div>
 

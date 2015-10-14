@@ -1,14 +1,50 @@
 {% extends "base.html" %}
+
      {% block search %} <td><b>Search</b></td>{% endblock %}
+
 
 
 {% block content %}
 
 <form action="/showsearch" method="get">
-        <input type="search" name="searchStream" placeholder="Lucknow"></br>
+    <div class="ui-widget">
+        <input type="search" name="searchStream" placeholder="Lucknow" id="search_word" ></br>
         <input type="submit" value="Search">
+    </div>
 </form>
+<script>
 
-<p>{{showNum}} results for <b>{{stream_name}}</b>,<br>  click on image to view stream</p>
+ $(document).ready(function (){
+
+ $.getJSON("/autocompletelist",function(data){
+
+
+
+          $( "#search_word" ).autocomplete({
+              source: function( request, response ) {
+          var matcher = new RegExp(request.term );
+          var i = 0;
+          response( $.grep(data, function( item ){
+
+              if (matcher.test(item))
+                i = i +1;
+              if (i<21&& matcher.test(item))
+                return true;
+              else
+                return false;
+          }) );
+      }
+});
+ });
+
+
+ });
+
+
+
+
+  </script>
+
+
 
 {% endblock %}

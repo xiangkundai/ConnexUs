@@ -41,3 +41,6 @@ class CountViews(ndb.Model):
 class Count_pic(ndb.Model):
     numbers = ndb.IntegerProperty()
 
+class stream_name_set(ndb.Model):
+    name = ndb.StringProperty()
+

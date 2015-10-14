@@ -12,10 +12,16 @@
   <!-- Optional theme -->
   <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     {% block css %}<link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />{% endblock %}
-    <script src="/assets/js/dropzone.js"></script>
+    {% block script %}<script src="/assets/js/dropzone.js"></script>{% endblock %}
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 	 <style>
+       	.ui-autocomplete-loading {
+		background: white url("http://jqueryui.com/resources/demos/autocomplete/images/ui-anim_basic_16x16.gif") right center no-repeat;
+	}
     html, body {
       height: 100%;
     }

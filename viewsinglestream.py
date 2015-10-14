@@ -35,7 +35,7 @@ class UploadUrlHandler(webapp2.RequestHandler):
         upload_url = blobstore.create_upload_url('/upload')
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write('"' + upload_url + '"')
-        print(upload_url)
+
 
 
 class  ViewSinglePage(webapp2.RequestHandler):
@@ -193,6 +193,8 @@ class ShowPictures(webapp2.RequestHandler):
         if(users.get_current_user() and stream.author==users.get_current_user()):
             status = (1,1)
             for picture in pictures:
+                print('index')
+                print index
                 infos.append((picture.key(),picture.imgkey,index))
                 index=index+1
                 if(index==4):

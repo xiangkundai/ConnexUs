@@ -1,7 +1,7 @@
 import cgi
 import urllib
 import re
-import os
+import json
 import sys
 import os.path
 
@@ -18,7 +18,7 @@ from google.appengine.api import urlfetch
 
 from stream import Stream
 from stream import Picture
-
+from stream import stream_name_set
 import jinja2
 import os
 
@@ -32,6 +32,28 @@ class searchView(webapp2.RequestHandler):
     def get(self):
         template = JINJA_ENVIRONMENT.get_template('search_index.html')
         self.response.write(template.render())
+
+class autoComplete(webapp2.RequestHandler):
+    def get(self):
+        streams = Stream.query().fetch()
+        ndb.delete_multi(stream_name_set.query().fetch(keys_only=True))
+        for stream in streams:
+            name_set = stream_name_set()
+            name_set.name = stream.name
+            name_set.put()
+
+class autoCompleteList(webapp2.RequestHandler):
+    def get(self):
+        return_list = list()
+        name_sets = stream_name_set.query().fetch()
+        print(name_sets)
+        for name_set in name_sets:
+            return_list.append(str(name_set.name))
+           # print (name_set.name)
+       # return_dic = {"nameList" , return_list}
+        self.response.headers['Content-Type'] = 'application/json'
+        return_list = json.dumps(return_list)
+        self.response.out.write(return_list)
 
 
 class showSearch(webapp2.RequestHandler):
@@ -111,4 +133,6 @@ def cxMax(a, b):
 application = webapp2.WSGIApplication([
     ('/search', searchView),
     ('/showsearch', showSearch),
+    ('/autocomplete',autoComplete),
+    ('/autocompletelist',autoCompleteList)
 ], debug=True)
