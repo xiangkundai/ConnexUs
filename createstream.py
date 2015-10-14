@@ -10,6 +10,7 @@ import jinja2
 
 from stream import Stream
 from stream import CountViews
+from stream import  Count_pic
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -41,6 +42,9 @@ class CreateStream(webapp2.RequestHandler):
         if (len(streams)<1):
             stream=Stream()
             count=CountViews(parent=ndb.Key('User',users.get_current_user().nickname()))
+            pic_num = Count_pic(parent = ndb.Key('Stream',stream_name))
+            pic_num.numbers = 0
+            pic_num.put()
             stream.name=stream_name
             count.name=stream_name
             count.numbers=0

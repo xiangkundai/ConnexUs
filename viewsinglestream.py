@@ -1,6 +1,7 @@
 import cgi
 import urllib
 import re
+import time
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
@@ -17,6 +18,7 @@ from google.appengine.api import urlfetch
 from stream import Stream
 from stream import Picture
 from stream import CountViews
+from stream import Count_pic
 
 
 import jinja2
@@ -33,7 +35,7 @@ class UploadUrlHandler(webapp2.RequestHandler):
         upload_url = blobstore.create_upload_url('/upload')
         self.response.headers['Content-Type'] = 'application/json'
         self.response.out.write('"' + upload_url + '"')
-        print('uploadurl')
+        print(upload_url)
 
 
 class  ViewSinglePage(webapp2.RequestHandler):
@@ -54,7 +56,7 @@ class  ViewSinglePage(webapp2.RequestHandler):
 
         pictures=db.GqlQuery("SELECT *FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC LIMIT 3" , db.Key.from_path('Stream',stream_name))
 
-        print pictures[0].imgkey
+        #print pictures[0].imgkey
         uploadurl = blobstore.create_upload_url('/upload')
         showmoreurl=urllib.urlencode({'showmore': stream.name+"=="+users.get_current_user().nickname()})
         template_values = {
@@ -83,20 +85,33 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
 
         stream_name=re.findall('=(.*)',original_url)[0]
        # print(len(img))
+     #   for img in imgs:
         if Stream.author==users.get_current_user():
             stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
-            #   for img in imgs:
+            #for img in imgs:
             print('3')
             picture=Picture(parent=db.Key.from_path('Stream',stream_name))
-            stream.lastnewdate=  picture.uploaddate
-            stream.numberofpictures=stream.numberofpictures+1
+            stream.lastnewdate= picture.uploaddate
+            pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream_name)).fetch()[0]
+          #  print(pic_counts)
+           # for pic_count in pic_counts:
+            pic_count.numbers=pic_count.numbers+1
+            pic_count.put()
+            print (stream)
+            print (pic_count.numbers)
+            print (stream.numberofpictures)
+            print (stream.total)
+            stream.numberofpictures=pic_count.numbers
             stream.total=stream.total+1
             #picture.id=str(stream.total)
-            #img=images.resize(img,300,300)
+           # img=images.resize(img,300,300)
             picture.imgkey=str(img.key())
             picture.put()
             stream.put()
-            print('4')
+            print('!!')
+            print (stream.numberofpictures)
+            print (stream.total)
+            #time.sleep(5.0)
         else:
             self.response.out.write('<h2 >Action not allowed!</h2>')
         print('5')
@@ -114,7 +129,12 @@ class DeletePictures(webapp2.RequestHandler):
         for picture in pictures:
             blobstore.delete(picture.imgkey)
         db.delete(pictures)
-        stream.numberofpictures=stream.numberofpictures-len(dellsts)
+        pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream_name)).fetch()[0]
+          #  print(pic_counts)
+           # for pic_count in pic_counts:
+        pic_count.numbers=pic_count.numbers - len(dellsts)
+        pic_count.put()
+        stream.numberofpictures=pic_count.numbers
         stream.put()
         self.redirect(original_url)
 

@@ -37,3 +37,7 @@ class CountViews(ndb.Model):
     name=ndb.StringProperty()
     numbers=ndb.IntegerProperty()
     totalviews=ndb.IntegerProperty()
+
+class Count_pic(ndb.Model):
+    numbers = ndb.IntegerProperty()
+

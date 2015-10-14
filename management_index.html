@@ -20,7 +20,7 @@
           {% if stream_1 %}
             <td><a href="{{stream_1.url}}">{{stream_1.name}}</a></td>
             <td>{{stream_1.lastnewdate}}</td>
-            <td>{{stream_1.numberofpictures}}</td>
+            <td>{{picNum_list[loop.index0]}}</td>
             <td><input type="checkbox" name="status" value="{{stream_1.name}}"></td>
           {% endif %}
            </tr>

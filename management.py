@@ -11,7 +11,7 @@ from google.appengine.api import images
 from stream import Stream
 from stream import Picture
 from stream import CountViews
-
+from stream import Count_pic
 import webapp2
 import jinja2
 import os
@@ -45,7 +45,11 @@ class ManagementPage(webapp2.RequestHandler):
 
         self.response.write(users.get_current_user())
 
+        picNum_list = []
         streams_1=Stream.query(Stream.author==users.get_current_user()).order(-Stream.creattime).fetch()
+        for stream in streams_1:
+           pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream.name)).fetch()[0]
+           picNum_list.append(pic_count.numbers)
         streams = Stream.query().fetch()
         streams_2 = []
         count_list = []
@@ -54,14 +58,15 @@ class ManagementPage(webapp2.RequestHandler):
                 if(users.get_current_user().nickname() in stream.subscribers):
                     count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
                     streams_2.append(stream)
-                    count_list.append(count)
+                    count_list.append(count.numbers)
 
         url = users.create_logout_url('/')
         template_values = {
                 'streams_1': streams_1,
                 'streams_2': streams_2,
                 'count_list': count_list,
-                'url': url
+                'url': url,
+            "picNum_list":picNum_list
         }
 
         template = JINJA_ENVIRONMENT.get_template('management_index.html')
