@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Connexus</title>
-	<meta charset=="utf-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="/assets/images/favicon.ico">
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <title>ConnexUs</title>
+
+  <!-- Bootstrap core CSS -->
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
   <!-- Optional theme -->
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    {% block css %}<link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />{% endblock %}
-    {% block script %}<script src="/assets/js/dropzone.js"></script>{% endblock %}
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-	 <style>
-       	.ui-autocomplete-loading {
-		background: white url("http://jqueryui.com/resources/demos/autocomplete/images/ui-anim_basic_16x16.gif") right center no-repeat;
-	}
+  <!-- Custom styles for this template -->
+  <link href="/assets/css/cover.css" rel="stylesheet">
+  <link href="/assets/css/non-responsive.css" rel="stylesheet">
+  <script src="/assets/js/ie-emulation-modes-warning.js"></script>
+
+  <!--    {% block css %}<link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />{% endblock %} -->
+  {% block script %}<script src="/assets/js/dropzone.js"></script>{% endblock %}
+
+
+  <link href="/assets/css/lightbox.css" rel="stylesheet">
+
+
+  <style>
+    .ui-autocomplete-loading {
+      background: white url("http://jqueryui.com/resources/demos/autocomplete/images/ui-anim_basic_16x16.gif") right center no-repeat;
+    }
     html, body {
       height: 100%;
     }
@@ -79,71 +91,102 @@
 
   </style>
 
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
 </head>
+
 <body>
-<div id="wrapper">
-	<div id="header">
-		<h1>Connex.us</h1>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
-	<table style="width:70%">
-		<tr>
-			{% block manage %}<td><a href="management">Manage</a></td>{% endblock %}
-			{% block create %}<td><a href="createstream">Create</a></td>{% endblock %}
-			{% block view %}<td><a href="viewallstreams">View</a></td>{% endblock %}
 
-    		{% block trending %}<td><a href="trending">Trending</a></td>{% endblock %}
-    		{% block social%}<td><a href="social">Social</a></td>{% endblock %}
-          <td><form action="/showsearch" method="get">
-    <div class="ui-widget">
-        <input type="search" name="searchStream" placeholder="Lucknow" id="search_word" ></br>
-        <input type="submit" value="Search">
+
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <!-- The mobile navbar-toggle button can be safely removed since you do not need it in a non-responsive implementation -->
+      <a class="navbar-brand" href="#">Connex Us</a>
     </div>
-</form>
-<script>
+    <!-- Note that the .navbar-collapse and .collapse classes have been removed from the #navbar -->
+    <div id="navbar">
+      <ul class="nav navbar-nav">
+        {% block manage %}  <li ><a href="management">Manage</a></li>{% endblock %}
+        {% block creat%}        <li><a href="createstream">Create</a></li>{% endblock %}
+        {% block view %} <li><a href="viewallstreams">View</a></li>{% endblock %}
+        {% block trending %} <li><a href="trending">Trending</a></li>{% endblock %}
 
- $(document).ready(function (){
+      </ul>
+      <form class="navbar-form navbar-left" role="search" action="/showsearch" method="get">
+        <div class="form-group ui-widget">
+          <input type="search" name="searchStream"  class="form-control" placeholder="Search" id="search_word">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      {% block user%}  <ul class="nav navbar-nav navbar-right">
 
- $.getJSON("/autocompletelist",function(data){
+      <li><a href="/">{{user_name}}</a></li>
+    </ul>{% endblock%}
+      <script>
 
+        $(document).ready(function (){
 
+          $.getJSON("/autocompletelist",function(data){
+            console.log(data);
 
-          $( "#search_word" ).autocomplete({
+            $( "#search_word" ).autocomplete({
               source: function( request, response ) {
-          var matcher = new RegExp(request.term );
-          var i = 0;
-          response( $.grep(data, function( item ){
+                var matcher = new RegExp(request.term );
+                var i = 0;
+                response( $.grep(data, function( item ){
 
-              if (matcher.test(item))
-                i = i +1;
-              if (i<21&& matcher.test(item))
-                return true;
-              else
-                return false;
-          }) );
-      }
-});
- });
-
-
- });
+                  if (matcher.test(item))
+                    i = i +1;
+                  if (i<21&& matcher.test(item))
+                    return true;
+                  else
+                    return false;
+                }) );
+              }
+            });
+          });
 
 
+        });
 
 
-  </script>
-</td>
-  		</tr>
-  	</table>
-	</div>
 
-    <div id="content">{% block content %}{% endblock %}</div>
-    
-    <div id="footer">
-        &copy; Copyright 2015 by Kevin & Wenwen</a>.
-    </div>
 
+      </script>
+
+
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+
+<div id="content" class="container">{% block content %}{% endblock %}</div>
+<!--  <h1 class="cover-heading">Cover your page.</h1>
+  <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+  <p class="lead">
+    <a href="#" class="btn btn-lg btn-default">Learn more</a>
+  </p>
+</div>-->
+
+<div class="inner">
+  <p> &copy; Copyright 2015 by Kevin & Wenwen</a>.</p>
 </div>
 
 
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script src="/assets/js/lightbox.js"></script>
 </body>
 </html>

@@ -1,62 +1,61 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container">
+<div class="page-header">
+    <h1>{{stream_name}}</h1>
+</div>
 
-    <div class="masthead">
-        <h3 class="muted">{{stream_name}}</h3>
-
-    </div>
-        {%if(status==(1,1))%}
-        <form action="delpic" method="post">
-            <div class="image-row">
-                    <div class="image-set">
-                        <table>
-            {%for info in infos%}
+{%if(status==(1,1))%}
+<form action="delpic" method="post">
+    <div class="image-row">
+        <div class="image-set">
+            <table>
+                {%for info in infos%}
                 {%if(info[2]==0)%}
-                        <tr>
+                <tr>
+                    {%endif%}
+
+                    <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+                        <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
+                        <input type="checkbox" name="status", value="{{info[1]}}">
+                    </td>
+
+                    {%if(info[2]==3)%}
+                </tr>
                 {%endif%}
 
+                {%endfor%}</table>
+        </div>
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Delete Selected">
+</form>
+<p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p>
+<input type="submit" class="btn btn-info" value="Go Back" href="{{url}}">
+{%else%}
+<div class="image-row">
+    <div class="image-set">
+        <table>
+            {%for info in infos%}
+            {%if(info[2]==0)%}
+            <tr>
+                {%endif%}
                 <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
                     <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
-                    <input type="checkbox" name="status", value="{{info[1]}}">
                 </td>
-
                 {%if(info[2]==3)%}
-                    </tr>
-                {%endif%}
-
+            </tr>
+            {%endif%}
             {%endfor%}</table>
-                    </div>
-             </div>
-
-            <input type="submit" value="Delete Selected">
-        </form>
-        <a href="{{url}}">Go Back</a>
-        {%else%}
-                    <div class="image-row">
-                    <div class="image-set">
-                        <table>
-        {%for info in infos%}
-            {%if(info[2]==0)%}
-                <tr>
-            {%endif%}
-            <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
-                <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
-            </td>
-            {%if(info[2]==3)%}
-                </tr>
-            {%endif%}
-        {%endfor%}</table>
-                </div>
-             </div>
-
-            {%if(status==(1,0))%}
-                <form action="subscribe" method="post"><input type="submit" value="Subscribe">
-                </form>
-            {%endif%}
-        <a href="/management">Go Back</a>
-        {%endif%}
+    </div>
 </div>
+
+{%if(status==(1,0))%}
+<form action="subscribe" method="post"><input type="submit" class="btn btn-success" value="Subscribe">
+</form>
+{%endif%}
+<p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p>
+{%endif%}
+
 
 
 

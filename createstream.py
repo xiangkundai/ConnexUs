@@ -19,8 +19,13 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class CreateStreamPage(webapp2.RequestHandler):
     def get(self):
+        user_name = users.get_current_user().nickname()
         template = JINJA_ENVIRONMENT.get_template('createstream_index.html')
-        self.response.write(template.render())
+        template_values = {
+                'user_name': user_name
+
+            }
+        self.response.write(template.render(template_values))
 
 class CreateStream(webapp2.RequestHandler):
     def post(self):

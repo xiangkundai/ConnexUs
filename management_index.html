@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-     {% block manage %} <td><b>Manage</b></td>{% endblock %}
+    {% block manage %}  <li class="active"><a href="management">Manage</a></li>{% endblock %}
 
 
 {% block content %}
+<div class="page-header">
+        <h1>Streams I own</h1>
 
-  <h2>Streams I own</h2>
+</div>
+
 <form action="/management" method="get">
     <table border="1" style="width:100%">
       <tr>

@@ -1,16 +1,20 @@
 {% extends "base.html" %}
-     {% block view %} <td><b>View</b></td>{% endblock %}
+     {% block view %}<li class="active"><a href="viewallstreams">View</a></li>{% endblock %}
 
 
 {% block content %}
-<h2>View All Streams</h2>
+<div class="page-header">
+  <h1>View All Streams</h1>
+
+</div>
+
 <table style = "width:100%">
 
 
     {% for stream in all_streams%}
 
           {% if stream %}
-            {% if loop.index0 %4 == 0 %}
+            {% if loop.index0 %3 == 0 %}
             <tr>
                  {% endif %}
 
@@ -20,7 +24,7 @@
                     <img src="{{stream.coverurl}}" alt="Cover Image" style="width:304px;height:228px;">
                     </a>
                </td>
-                {% if loop.index0 %4 == 3 %}
+                {% if loop.index0 %3 == 2 %}
                     </tr>
                 {% endif %}
 

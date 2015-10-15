@@ -27,6 +27,7 @@ class viewStreams(webapp2.RequestHandler):
     all_streams=Stream.query().order(-Stream.creattime).fetch()
 
     template_values = {
+                'user_name': users.get_current_user().nickname(),
                 'all_streams': all_streams,
         }
 

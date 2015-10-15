@@ -28,10 +28,10 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-class searchView(webapp2.RequestHandler):
-    def get(self):
-        template = JINJA_ENVIRONMENT.get_template('search_index.html')
-        self.response.write(template.render())
+#class searchView(webapp2.RequestHandler):
+ #   def get(self):
+  #      template = JINJA_ENVIRONMENT.get_template('search_index.html')
+   #     self.response.write(template.render())
 
 class autoComplete(webapp2.RequestHandler):
     def get(self):
@@ -132,7 +132,7 @@ def cxMax(a, b):
         return b
 
 application = webapp2.WSGIApplication([
-    ('/search', searchView),
+   # ('/search', searchView),
     ('/showsearch', showSearch),
     ('/autocomplete',autoComplete),
     ('/autocompletelist',autoCompleteList)

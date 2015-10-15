@@ -62,9 +62,11 @@ class Trending(webapp2.RequestHandler):
             if fre==288:
                 str="Every day"
 
+        user_name = users.get_current_user().nickname()
         print count_list
         print stream_list
         template_values = {
+                        'user_name':user_name,
                         'str':str,
                         'count_list':count_list,
                         'stream_list': stream_list

@@ -43,7 +43,7 @@ class ManagementPage(webapp2.RequestHandler):
                     stream.subscribers.remove(users.get_current_user().nickname())
                     stream.put()
 
-        self.response.write(users.get_current_user())
+
 
         picNum_list = []
         streams_1=Stream.query(Stream.author==users.get_current_user()).order(-Stream.creattime).fetch()
@@ -59,9 +59,10 @@ class ManagementPage(webapp2.RequestHandler):
                     count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
                     streams_2.append(stream)
                     count_list.append(count.numbers)
-
+        user_name = users.get_current_user().nickname()
         url = users.create_logout_url('/')
         template_values = {
+                'user_name':user_name,
                 'streams_1': streams_1,
                 'streams_2': streams_2,
                 'count_list': count_list,

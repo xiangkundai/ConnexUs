@@ -25,6 +25,10 @@ handlers:
   script: createstream.application
   login: required
 
+- url: /geoview.*
+  script: viewsinglestream.application
+  login: required
+
 - url: /uploadurlhandler
   script: viewsinglestream.application
   login: required

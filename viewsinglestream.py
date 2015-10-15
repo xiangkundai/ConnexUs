@@ -7,6 +7,9 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 from google.appengine.ext import db
 
+import os
+import random
+
 import webapp2
 
 from google.appengine.ext import blobstore
@@ -22,7 +25,7 @@ from stream import Count_pic
 
 
 import jinja2
-import os
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -59,12 +62,16 @@ class  ViewSinglePage(webapp2.RequestHandler):
         #print pictures[0].imgkey
         uploadurl = blobstore.create_upload_url('/upload')
         showmoreurl=urllib.urlencode({'showmore': stream.name+"=="+users.get_current_user().nickname()})
+        geoviewurl=urllib.urlencode({'geoview': stream.name+"=="+users.get_current_user().nickname()})
         template_values = {
+                        'user_name':users.get_current_user().nickname(),
                         'showmoreurl': showmoreurl,
                         'stream_name': stream_name,
                         'pictures':pictures,
                         'status':status,
-                       'uploadurl':uploadurl
+                       'uploadurl':uploadurl,
+                        'geoviewurl': geoviewurl
+
                      }
         template = JINJA_ENVIRONMENT.get_template('viewsinglestream_index.html')
         self.response.write(template.render(template_values))
@@ -82,7 +89,7 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
         print('1')
         original_url=self.request.headers['Referer']
         img=self.get_uploads()[0]
-
+        #img = Image.open(im)
         stream_name=re.findall('=(.*)',original_url)[0]
        # print(len(img))
      #   for img in imgs:
@@ -104,7 +111,7 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
             stream.numberofpictures=pic_count.numbers
             stream.total=stream.total+1
             #picture.id=str(stream.total)
-           # img=images.resize(img,300,300)
+            #img=img.resize((300,300))
             picture.imgkey=str(img.key())
             picture.put()
             stream.put()
@@ -218,14 +225,65 @@ class ShowPictures(webapp2.RequestHandler):
                 self.redirect(users.create_login_url(self.request.url))
 
 
-        template_values={"stream_name": stream_name,"infos":infos,"url":url,"status":status}
+        template_values={"stream_name": stream_name,"infos":infos,"url":url,"status":status,'user_name':users.get_current_user().nickname()}
         template=JINJA_ENVIRONMENT.get_template("showmore_index.html")
         self.response.write(template.render(template_values))
 
+class GeoView(webapp2.RequestHandler):
+    def get(self):
+        #self.response.write(users.get_current_user())
+        stream_name=re.findall('%3D(.*)%3D%3D',self.request.url)[0]
+        user_name=re.findall('%3D%3D(.*)',self.request.url)[0]
+        infos = []
+        status = (0,0)
+        index=0
+        url = ""
+        #Change!# stream=Stream.query(Stream.name==stream_name, Stream.author_name==user_name).fetch()[0]
+
+        pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream_name))
+
+        stream = Stream.query(Stream.name==stream_name).fetch()[0]
+
+
+        if(users.get_current_user() and stream.author==users.get_current_user()):
+            status = (1,1)
+            for picture in pictures:
+                lat = random.random
+                lng = random.random
+                infos.append((picture.key(),picture.imgkey,picture.uploaddate, lat, lng, index))
+                index=index+1
+                if(index==4):
+                    index = 0
+            url=urllib.urlencode({'streamname': stream.name})
+
+
+        else:
+            if(users.get_current_user()):
+                count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
+                count.numbers=count.numbers+1
+                count.totalviews=count.totalviews+1
+                count.put()
+                status = (1,0)
+                url=urllib.urlencode({'streamname': stream.name})
+                for picture in pictures:
+                    lat = random.random
+                    lng = random.random
+                    infos.append((picture.key(),0,picture.uploaddate, lat, lng,index))
+                    index=index+1
+                    if(index==4):
+                        index = 0
+            else:
+                self.redirect(users.create_login_url(self.request.url))
+
+
+        template_values={"stream_name": stream_name,"infos":infos,"url":url,"status":status}
+        template=JINJA_ENVIRONMENT.get_template("geoview_index.html")
+        self.response.write(template.render(template_values))
 
 application = webapp2.WSGIApplication([
     ('/upload', Upload),
     ('/showmore.*', ShowPictures),
+    ('/geoview.*', GeoView),
     ('/delpic', DeletePictures),
     ('/subscribe', SubscribeStream),
     ('/img.*', Image),
