@@ -248,8 +248,8 @@ class GeoView(webapp2.RequestHandler):
         if(users.get_current_user() and stream.author==users.get_current_user()):
             status = (1,1)
             for picture in pictures:
-                lat = random.random
-                lng = random.random
+                lat = random.random()
+                lng = random.random()
                 infos.append((picture.key(),picture.imgkey,picture.uploaddate, lat, lng, index))
                 index=index+1
                 if(index==4):
@@ -266,8 +266,8 @@ class GeoView(webapp2.RequestHandler):
                 status = (1,0)
                 url=urllib.urlencode({'streamname': stream.name})
                 for picture in pictures:
-                    lat = random.random
-                    lng = random.random
+                    lat = random.random()
+                    lng = random.random()
                     infos.append((picture.key(),0,picture.uploaddate, lat, lng,index))
                     index=index+1
                     if(index==4):
