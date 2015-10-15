@@ -137,19 +137,22 @@
             console.log(data);
 
             $( "#search_word" ).autocomplete({
-              source: function( request, response ) {
-                var matcher = new RegExp(request.term );
+              source:data
+                      /*function( request, response ) {
+                var matcher = new RegExp(request.term ,"i");
                 var i = 0;
-                response( $.grep(data, function( item ){
+               response( $.grep(data, function( item ){
 
-                  if (matcher.test(item))
-                    i = i +1;
-                  if (i<21&& matcher.test(item))
+                if( item.search(matcher))
+
+                // if (matcher.test(item))
+                   i = i +1;
+                 if (i<21&& item.search(matcher))
                     return true;
-                  else
-                    return false;
-                }) );
-              }
+                 else
+                  return false;
+               }) );
+              }*/
             });
           });
 
