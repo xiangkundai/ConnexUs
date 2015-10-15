@@ -216,6 +216,7 @@ class ShowPictures(webapp2.RequestHandler):
                 count.totalviews=count.totalviews+1
                 count.put()
                 status = (1,0)
+                url=urllib.urlencode({'streamname': stream.name})
                 for picture in pictures:
                     infos.append((picture.key(),0,index))
                     index=index+1

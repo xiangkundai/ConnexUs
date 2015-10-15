@@ -22,14 +22,19 @@
     </table>
 
 <div class="col-sm-4">
-    <form action="/update" method="post" class="list-group">
-        <ul>   <li >No reports <input type="radio" name="frequency" value="no" ></li>
-    <li >Every 5 minutes <input type="radio" name="frequency" value="5m" ></li>
-   <li >Every 1 hour <input type="radio" name="frequency" value="1h" ></li>
-   <li >Every day <input type="radio" name="frequency" value="1d" ></li>
-        </ul>
+    <form action="/update" method="post">
+        <!--<ul>-->
+    <table style="width:100%">
 
-    <input type="submit" value="Update rate" class="btn btn-lg btn-primary">
-</form>
+    <tr><th>No reports <input type="radio" name="frequency" value="no" ></th></tr>
+    <tr><th>Every 5 minutes <input type="radio" name="frequency" value="5m"></th></tr>
+    <tr><th>Every 1 hour <input type="radio" name="frequency" value="1h" ></th></tr>
+      <tr><th>Every day <input type="radio" name="frequency" value="1d" ></th></tr>
+
+ </table>
+        <!--</ul>-->
+
+    <input type="submit" value="Update rate" class="btn btn btn-primary">
+<!--</form>-->
         </div>
 {% endblock %}

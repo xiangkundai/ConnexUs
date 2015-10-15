@@ -1,71 +1,81 @@
 {% extends "base.html" %}
-    {% block manage %}  <li class="active"><a href="management">Manage</a></li>{% endblock %}
+{% block manage %}  <li class="active"><a href="management">Manage</a></li>{% endblock %}
 
 
 {% block content %}
 <div class="page-header">
-        <h1>Streams I own</h1>
+    <h1>Streams I own</h1>
 
 </div>
 
 <form action="/management" method="get">
-    <table border="1" style="width:100%">
-      <tr>
-        <th>Name</th>
-        <th>Last New Picture</th>
-        <th>Number of Pictures</th>
-        <th>Delete</th>
-      </tr>
+    <table style="width:100%">
+        <thead>
+        <tr>
+            <td>Name</td>
+            <td>Last New Picture</td>
+            <td>Number of Pictures</td>
+            <td>Delete</td>
+        </tr>
+        </thead>
 
-
+        <tbody>
         {% for stream_1 in streams_1%}
-           <tr>
-          {% if stream_1 %}
+        <tr>
+            {% if stream_1 %}
             <td><a href="{{stream_1.url}}">{{stream_1.name}}</a></td>
             <td>{{stream_1.lastnewdate}}</td>
             <td>{{picNum_list[loop.index0]}}</td>
             <td><input type="checkbox" name="status" value="{{stream_1.name}}"></td>
-          {% endif %}
-           </tr>
+            {% endif %}
+        </tr>
         {% endfor %}
 
-
+        </tbody>
     </table>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"><input type="submit" class="btn btn-danger" value="Delete"></div>
+    </div>
 
-           <input type="submit" value="Delete">
 </form>
 
 
 
-  <h2>Streams I subscribe to</h2>
+<h2>Streams I subscribe to</h2>
 <form action="/management" method="get">
-  <table border="1" style="width:100%">
-      <tr>
-        <th>Name</th>
-        <th>Last New Picture</th>
-        <th>Number of Pictures</th>
-          <th>Views</th>
-        <th>Delete</th>
-      </tr>
+    <table border="1" style="width:100%">
+        <tr>
+            <td>Name</td>
+            <td>Last New Picture</td>
+            <td>Number of Pictures</td>
+            <td>Views</td>
+            <td>Delete</td>
+        </tr>
 
         {% for stream_2 in streams_2%}
-         <tr>
+        <tr>
             {% if stream_2 %}
 
-                <td><a href="{{stream_2.guesturl}}">{{stream_2.name}}</a></td>
-                <td>{{stream_2.lastnewdate}}</td>
-                <td>{{stream_2.numberofpictures}}</td>
-                <td>{{count_list[loop.index0]}}</td>
-                <td><input type="checkbox" name="status1" value="{{stream_2.name}}"></td>
+            <td><a href="{{stream_2.guesturl}}">{{stream_2.name}}</a></td>
+            <td>{{stream_2.lastnewdate}}</td>
+            <td>{{stream_2.numberofpictures}}</td>
+            <td>{{count_list[loop.index0]}}</td>
+            <td><input type="checkbox" name="status1" value="{{stream_2.name}}"></td>
 
             {% endif %}
         </tr>
         {% endfor %}
 
-  </table>
+    </table>
 
-             <input type="submit" value="Delete">
-  </form>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"><input type="submit" class="btn btn-danger" value="Delete"></div>
+    </div>
+</form>
 
-<a href="{{ url|safe }}">Logout</a>
+
 {% endblock %}

@@ -15,7 +15,7 @@
                     {%endif%}
 
                     <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
-                        <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
+                        <img class="example-image" src="img?img_id={{info[0]}}" alt="" class="img-thumbnail" /></a>
                         <input type="checkbox" name="status", value="{{info[1]}}">
                     </td>
 
@@ -29,8 +29,14 @@
 
     <input type="submit" class="btn btn-danger" value="Delete Selected">
 </form>
-<p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p>
-<input type="submit" class="btn btn-info" value="Go Back" href="{{url}}">
+
+
+<div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4"><p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p></div>
+</div>
+
 {%else%}
 <div class="image-row">
     <div class="image-set">
@@ -40,7 +46,7 @@
             <tr>
                 {%endif%}
                 <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
-                    <img class="example-image" src="img?img_id={{info[0]}}" alt="" /></a>
+                    <img class="example-image" src="img?img_id={{info[0]}}" alt="" class="img-thumbnail" /></a>
                 </td>
                 {%if(info[2]==3)%}
             </tr>
@@ -50,10 +56,16 @@
 </div>
 
 {%if(status==(1,0))%}
-<form action="subscribe" method="post"><input type="submit" class="btn btn-success" value="Subscribe">
-</form>
+
+
+
+<div class="row">
+    <div class="col-md-4"><form action="subscribe" method="post"><input type="submit" class="btn btn-success" value="Subscribe">
+    </form></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4"><p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p></div>
+</div>
 {%endif%}
-<p><a class="btn btn-primary" href="{{url}}" role="button">Go back &raquo;</a></p>
 {%endif%}
 
 

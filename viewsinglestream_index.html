@@ -9,7 +9,7 @@
 <table border="1" style="width:100%">
     <tr>
         {% for picture in pictures%}
-            <td><img src="img?img_id={{picture.key()}}" ></td>
+            <td><img src="img?img_id={{picture.key()}}" class="img-thumbnail"></td>
         {% endfor%}
     </tr>
 </table>
