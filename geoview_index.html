@@ -177,7 +177,8 @@
             todayLastYear.setFullYear(todayLastYear.getFullYear() - 1);
             $("#slider").dateRangeSlider({
                 bounds: {min: todayLastYear, max: today},
-                defaultValues: {min: todayLastYear, max: today}
+                defaultValues: {min: todayLastYear, max: today},
+                step: {days: 1}
             });
 
             var from = todayLastYear;

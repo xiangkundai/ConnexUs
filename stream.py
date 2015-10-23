@@ -25,7 +25,8 @@ class Stream(ndb.Model):
     #author=ndb.stringProperty()
 
 class Picture(db.Model):
-    imgkey=db.StringProperty()
+    imgkey=ndb.StringProperty()
+    #imgkey = ndb.BlobKeyProperty()
     uploaddate= db.DateTimeProperty(auto_now_add=True)
 
 class Global(ndb.Model):

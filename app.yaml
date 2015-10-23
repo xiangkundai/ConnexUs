@@ -11,7 +11,7 @@ handlers:
   script: trending.application
   #login: required
 
-- url: /autocomplete
+- url: /autocompletecorn
   script: search.application
 
 - url: /autocompletelist
@@ -39,7 +39,7 @@ handlers:
 
 - url: /viewallstreams
   script: view.application
-  login: required
+ # login: required
 
 - url: /search
   script: search.application
@@ -63,6 +63,7 @@ handlers:
 
 - url: /management
   script: management.application
+  login: required
 
 - url: /delstream
   script: management.application
@@ -90,6 +91,12 @@ handlers:
 - url: /img.*
   script: viewsinglestream.application
   login: required
+
+- url: /viewAllPhotos
+  script: view.application
+
+- url: /mySubscribe
+  script: view.application
 
 - url: /.*
   script: login.application

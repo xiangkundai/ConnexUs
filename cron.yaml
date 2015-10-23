@@ -6,5 +6,5 @@ cron:
   url: /clean
   schedule: every 1 hours
 
-- url: /autocomplete
+- url: /autocompletecorn
   schedule: every 1 hours

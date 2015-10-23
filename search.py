@@ -42,6 +42,7 @@ class autoComplete(webapp2.RequestHandler):
             name_set.name = stream.name
             name_set.put()
 
+
 class autoCompleteList(webapp2.RequestHandler):
     def get(self):
         return_list = list()
@@ -49,7 +50,7 @@ class autoCompleteList(webapp2.RequestHandler):
         print(name_sets)
         for name_set in name_sets:
             return_list.append(str(name_set.name))
-           # print (name_set.name)
+            print (name_set.name)
        # return_dic = {"nameList" , return_list}
         self.response.headers['Content-Type'] = 'application/json'
         return_list.sort()
@@ -134,6 +135,6 @@ def cxMax(a, b):
 application = webapp2.WSGIApplication([
    # ('/search', searchView),
     ('/showsearch', showSearch),
-    ('/autocomplete',autoComplete),
+    ('/autocompletecorn',autoComplete),
     ('/autocompletelist',autoCompleteList)
 ], debug=True)

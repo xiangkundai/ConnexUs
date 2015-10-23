@@ -100,6 +100,7 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
             picture=Picture(parent=db.Key.from_path('Stream',stream_name))
             stream.lastnewdate= picture.uploaddate
             pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream_name)).fetch()[0]
+            print pic_count
           #  print(pic_counts)
            # for pic_count in pic_counts:
             pic_count.numbers=pic_count.numbers+1
@@ -175,7 +176,8 @@ class SubscribeStream(webapp2.RequestHandler):
         stream=Stream.query(Stream.name==stream_name).fetch()[0]
 
         if users.get_current_user():
-            stream.subscribers.append(users.get_current_user().nickname())
+            #stream.subscribers.append(users.get_current_user().nickname())
+            stream.subscribers.append(users.get_current_user().email())
         stream.put()
 
         self.redirect(original_url0)
