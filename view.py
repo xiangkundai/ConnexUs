@@ -99,9 +99,10 @@ class mySubscribe(webapp2.RequestHandler):
         final_picture.sort(key=lambda pic:pic.uploaddate, reverse=True)
         for f_pic in final_picture:
             #print f_pic.uploaddate
-            f = "http://aptmini3.appspot.com/view_photo/"+f_pic.imgkey
+            #f = "http://aptmini3.appspot.com/view_photo/"+f_pic.imgkey
            # f.get_serving_url()
-            displayImages.append(f)
+            url = images.get_serving_url(f_pic.imgkey)
+            displayImages.append(url)
 
            # print f_pic.uploaddate
 
