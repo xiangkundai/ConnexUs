@@ -102,6 +102,7 @@ class mySubscribe(webapp2.RequestHandler):
             #f = "http://aptmini3.appspot.com/view_photo/"+f_pic.imgkey
            # f.get_serving_url()
             url = images.get_serving_url(f_pic.imgkey)
+            url = url + "=s800-c"
             displayImages.append(url)
 
            # print f_pic.uploaddate

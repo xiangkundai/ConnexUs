@@ -14,7 +14,7 @@
                 <tr>
                     {%endif%}
 
-                    <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+                    <td><a class="example-image-link" href="/view_photo/{{info[1]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
                         <img class="example-image" src="/view_photo/{{info[1]}}" alt="" class="img-thumbnail" /></a>
                         <input type="checkbox" name="status", value="{{info[1]}}">
                     </td>
@@ -45,7 +45,7 @@
             {%if(info[2]==0)%}
             <tr>
                 {%endif%}
-                <td><a class="example-image-link" href="img?img_id={{info[0]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
+                <td><a class="example-image-link" href="/view_photo/{{info[1]}}" data-lightbox="example-set" data-title="Click the right half of the image to move forward.">
                     <img class="example-image" src="/view_photo/{{info[1]}}" alt="" class="img-thumbnail" /></a>
                 </td>
                 {%if(info[2]==3)%}
