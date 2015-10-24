@@ -25,9 +25,11 @@ class Stream(ndb.Model):
     #author=ndb.stringProperty()
 
 class Picture(db.Model):
-    imgkey=ndb.StringProperty()
-    #imgkey = ndb.BlobKeyProperty()
+    imgkey = db.StringProperty()
+    #blob_key = db.BlobKeyProperty()
     uploaddate= db.DateTimeProperty(auto_now_add=True)
+    loc = db.GeoPtProperty(required=True,default=db.GeoPt(0,0))
+
 
 class Global(ndb.Model):
     name=ndb.StringProperty()
@@ -44,4 +46,8 @@ class Count_pic(ndb.Model):
 
 class stream_name_set(ndb.Model):
     name = ndb.StringProperty()
+
+
+
+
 

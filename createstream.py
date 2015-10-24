@@ -19,9 +19,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 class CreateStreamPage(webapp2.RequestHandler):
     def get(self):
-        print "yes!1"
+        #print "yes!1"
         user_name = users.get_current_user().nickname()
-        print "yes!1 "+user_name
+        #print "yes!1 "+user_name
         template = JINJA_ENVIRONMENT.get_template('createstream_index.html')
         template_values = {
                 'user_name': user_name

@@ -59,7 +59,6 @@ class  ViewSinglePage(webapp2.RequestHandler):
 
         pictures=db.GqlQuery("SELECT *FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC LIMIT 3" , db.Key.from_path('Stream',stream_name))
 
-        #print pictures[0].imgkey
         uploadurl = blobstore.create_upload_url('/upload')
         showmoreurl=urllib.urlencode({'showmore': stream.name+"=="+users.get_current_user().nickname()})
         geoviewurl=urllib.urlencode({'geoview': stream.name+"=="+users.get_current_user().nickname()})
@@ -76,12 +75,18 @@ class  ViewSinglePage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('viewsinglestream_index.html')
         self.response.write(template.render(template_values))
 
-class Image(blobstore_handlers.BlobstoreDownloadHandler):
-    def get(self):
-        picture = db.get(self.request.get('img_id'))
-        blob_info = blobstore.BlobInfo.get(picture.imgkey)
-        self.send_blob(blob_info)
+#class Image(blobstore_handlers.BlobstoreDownloadHandler):
+ #   def get(self):
+  #      picture = db.get(self.request.get('img_id'))
+   #     blob_info = blobstore.BlobInfo.get(picture.imgkey)
+     #   self.send_blob(blob_info)
 
+class ViewPhotoHandler(blobstore_handlers.BlobstoreDownloadHandler):
+    def get(self, photo_key):
+        if not blobstore.get(photo_key):
+            self.error(404)
+        else:
+            self.send_blob(photo_key)
 
 
 class Upload(blobstore_handlers.BlobstoreUploadHandler):
@@ -89,6 +94,7 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
         print('1')
         original_url=self.request.headers['Referer']
         img=self.get_uploads()[0]
+        #print img.key()
         #img = Image.open(im)
         stream_name=re.findall('=(.*)',original_url)[0]
        # print(len(img))
@@ -97,7 +103,7 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
             stream=Stream.query(Stream.name==stream_name, Stream.author==users.get_current_user()).fetch()[0]
             #for img in imgs:
             print('3')
-            picture=Picture(parent=db.Key.from_path('Stream',stream_name))
+            picture=Picture(parent=db.Key.from_path('Stream',stream_name),imgkey=str(img.key()))
             stream.lastnewdate= picture.uploaddate
             pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream_name)).fetch()[0]
             print pic_count
@@ -113,12 +119,13 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
             stream.total=stream.total+1
             #picture.id=str(stream.total)
             #img=img.resize((300,300))
-            picture.imgkey=str(img.key())
+           # picture.imgkey=str(img.key())
+           # print  picture.imgkey
             picture.put()
             stream.put()
-            print('!!')
-            print (stream.numberofpictures)
-            print (stream.total)
+           # print('!!')
+            #print (stream.numberofpictures)
+          #  print (stream.total)
             #time.sleep(5.0)
         else:
             self.response.out.write('<h2 >Action not allowed!</h2>')
@@ -220,7 +227,7 @@ class ShowPictures(webapp2.RequestHandler):
                 status = (1,0)
                 url=urllib.urlencode({'streamname': stream.name})
                 for picture in pictures:
-                    infos.append((picture.key(),0,index))
+                    infos.append((picture.key(),picture.imgkey,index))
                     index=index+1
                     if(index==4):
                         index = 0
@@ -271,7 +278,7 @@ class GeoView(webapp2.RequestHandler):
                 for picture in pictures:
                     lat = random.random()
                     lng = random.random()
-                    infos.append((picture.key(),0,picture.uploaddate, lat, lng,index))
+                    infos.append((picture.key(),picture.imgkey,picture.uploaddate, lat, lng,index))
                     index=index+1
                     if(index==4):
                         index = 0
@@ -289,7 +296,7 @@ application = webapp2.WSGIApplication([
     ('/geoview.*', GeoView),
     ('/delpic', DeletePictures),
     ('/subscribe', SubscribeStream),
-    ('/img.*', Image),
+    ('/view_photo/([^/]+)?',ViewPhotoHandler),
     ('/stream.*', ViewSinglePage),
     ('/uploadurlhandler',UploadUrlHandler)
 

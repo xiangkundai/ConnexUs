@@ -47,7 +47,7 @@ class autoCompleteList(webapp2.RequestHandler):
     def get(self):
         return_list = list()
         name_sets = stream_name_set.query().fetch()
-        print(name_sets)
+        #print(name_sets)
         for name_set in name_sets:
             return_list.append(str(name_set.name))
             print (name_set.name)
@@ -94,7 +94,7 @@ class showSearch(webapp2.RequestHandler):
                 #self.response.write(stream.numberofpictures)
                 if stream.numberofpictures > 0:
                     pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
-                    key_list.append(pictures[0].key())
+                    key_list.append(pictures[0].imgkey)
 
                 else:
                     key_list.append(0)

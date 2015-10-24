@@ -34,7 +34,7 @@ class ManagementPage(webapp2.RequestHandler):
                 db.delete(pictures)
                 pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream.name))
                 ndb.delete_multi(ndb.put_multi(pic_count))
-                print pic_count
+                #print pic_count
             ndb.delete_multi(ndb.put_multi(streams))
             ndb.delete_multi(ndb.put_multi(counts))
         dellsts=self.request.get_all("status1")

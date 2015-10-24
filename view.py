@@ -16,6 +16,7 @@ import jinja2
 import os
 import json
 
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -98,7 +99,10 @@ class mySubscribe(webapp2.RequestHandler):
         final_picture.sort(key=lambda pic:pic.uploaddate, reverse=True)
         for f_pic in final_picture:
             #print f_pic.uploaddate
-            displayImages.append("http://connexus2-1095.appspot.com/img?img_id="+str(f_pic.key()))
+            f = "http://aptmini3.appspot.com/view_photo/"+f_pic.imgkey
+           # f.get_serving_url()
+            displayImages.append(f)
+
            # print f_pic.uploaddate
 
 

@@ -88,19 +88,23 @@ handlers:
 - url: /subscribe
   script: viewsinglestream.application
 
-- url: /img.*
-  script: viewsinglestream.application
-  login: required
-
 - url: /viewAllPhotos
   script: view.application
 
 - url: /mySubscribe
   script: view.application
 
+- url: /view_photo.*
+  script: viewsinglestream.application
+  login: required
+
 - url: /.*
   script: login.application
 
+
+#- url: /img.*
+ # script: viewsinglestream.application
+  #login: required
 
 libraries:
 - name: webapp2
@@ -109,3 +113,5 @@ libraries:
   version: latest
 - name: jinja2
   version: latest
+
+

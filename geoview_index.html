@@ -159,7 +159,7 @@
 
                     {% for info in infos %}
                         $(this).gmap('addMarker', { 'position': new google.maps.LatLng(southWest.lat() + latSpan * {{ info[3] }}, southWest.lng() + lngSpan * {{ info[4] }}) } ).click(function() {
-                $('#map_canvas').gmap('openInfoWindow', { content : '<IMG height="100" width="100" src="img?img_id={{ info[0] }}">' }, this);
+                $('#map_canvas').gmap('openInfoWindow', { content : '<IMG height="100" width="100" src="/view_photo/{{info[1]}}"">' }, this);
             });
             {% endfor%}
 
@@ -204,7 +204,7 @@
                     var info_date = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);  // Apply each element to the Date function
                     if (from <= info_date && info_date <= to) {
                         tmp.gmap('addMarker', { 'position': new google.maps.LatLng(southWest.lat() + latSpan * {{ info[3] }}, southWest.lng() + lngSpan *{{ info[4] }}) }).click(function() {
-                tmp.gmap('openInfoWindow', { content : '<IMG height="100" width="100" src="img?img_id={{ info[0] }}">' }, this);
+                tmp.gmap('openInfoWindow', { content : '<IMG height="100" width="100" src="/view_photo/{{info[1]}}">' }, this);
             });
         }
         {% endfor %}
