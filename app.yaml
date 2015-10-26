@@ -41,9 +41,8 @@ handlers:
   script: view.application
  # login: required
 
-- url: /search
-  script: search.application
-  login: required
+
+
 
 - url: /showsearch
   script: search.application
@@ -94,6 +93,7 @@ handlers:
 
 
 
+
 - url: /viewAllPhotos
   script: view.application
 
@@ -108,6 +108,10 @@ handlers:
 
 - url: /uploadFromAndroid
   script: viewsinglestream.application
+
+- url: /search
+  script: search.application
+
 
 - url: /.*
   script: login.application

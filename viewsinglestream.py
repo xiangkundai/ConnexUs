@@ -302,13 +302,19 @@ class GeoView(webapp2.RequestHandler):
 class viewSingleStreamFromAndroid(webapp2.RequestHandler):
     def get(self):
         stream_name = self.request.get("stream_name")
-        print 'here'
-        print stream_name
+        email = self.request.get("email")
         caption = []
         displayImages = []
         #print stream_name
         pictures = db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream_name))
         stream = Stream.query(Stream.name==stream_name).fetch()[0]
+
+        if stream.author_name.lower()!= email.split("@",1)[0]:
+            count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
+            count.numbers=count.numbers+1
+            count.totalviews=count.totalviews+1
+            count.put()
+
 
 
         for pic in pictures:
