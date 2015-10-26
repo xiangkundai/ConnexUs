@@ -26,6 +26,7 @@ class Stream(ndb.Model):
 
 class Picture(db.Model):
     imgkey = db.StringProperty()
+    caption = db.StringProperty(default="Hi there, I am a picture!")
     #blob_key = db.BlobKeyProperty()
     uploaddate= db.DateTimeProperty(auto_now_add=True)
     loc = db.GeoPtProperty(required=True,default=db.GeoPt(0,0))

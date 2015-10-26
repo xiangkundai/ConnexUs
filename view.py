@@ -58,19 +58,15 @@ class viewAllPhotos(webapp2.RequestHandler):
 class mySubscribe(webapp2.RequestHandler):
     def post(self):
         email = self.request.get("email")
-        print (type(email))
-      #  location = email.find("@")
-       # user = email[:location]
-   #     print "user: "+user
         final_picture = []
-     #   first_flag = True
         displayImages = []
+        caption = []
         streams = Stream.query().fetch()
-        print streams
-        print streams[0]
+        #print streams
+        #print streams[0]
         #print type(users.get_current_user().nickname())
 
-        print users.get_current_user()
+        #print users.get_current_user()
      #   for stream in streams:
 
       #      if(users.get_current_user().nickname() in stream.subscribers):
@@ -101,14 +97,15 @@ class mySubscribe(webapp2.RequestHandler):
             #print f_pic.uploaddate
             #f = "http://aptmini3.appspot.com/view_photo/"+f_pic.imgkey
            # f.get_serving_url()
+            caption.append(f_pic.caption)
             url = images.get_serving_url(f_pic.imgkey)
-            url = url + "=s800-c"
+            url = url + "=s600"
             displayImages.append(url)
 
            # print f_pic.uploaddate
 
 
-        dictPassed = {'displayImages':displayImages}
+        dictPassed = {'displayImages':displayImages,'caption':caption}
         jsonObj = json.dumps(dictPassed, sort_keys=True,indent=4, separators=(',', ': '))
         self.response.write(jsonObj)
 

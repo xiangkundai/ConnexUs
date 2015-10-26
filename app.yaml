@@ -88,18 +88,30 @@ handlers:
 - url: /subscribe
   script: viewsinglestream.application
 
+- url: /view_photo.*
+  script: viewsinglestream.application
+  login: required
+
+
+
 - url: /viewAllPhotos
   script: view.application
 
 - url: /mySubscribe
   script: view.application
 
-- url: /view_photo.*
+- url: /viewSingleStream
   script: viewsinglestream.application
-  login: required
+
+- url: /getUploadURL
+  script: viewsinglestream.application
+
+- url: /uploadFromAndroid
+  script: viewsinglestream.application
 
 - url: /.*
   script: login.application
+
 
 
 #- url: /img.*
