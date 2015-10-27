@@ -118,10 +118,10 @@ class Upload(blobstore_handlers.BlobstoreUploadHandler):
             # for pic_count in pic_counts:
             pic_count.numbers=pic_count.numbers+1
             pic_count.put()
-            print (stream)
-            print (pic_count.numbers)
-            print (stream.numberofpictures)
-            print (stream.total)
+
+            if stream.tag != None:
+                picture.caption = stream.tag[0]
+
             #stream.numberofpictures=pic_count.numbers
             #stream.total=stream.total+1
             #picture.id=str(stream.total)
@@ -319,7 +319,7 @@ class viewSingleStreamFromAndroid(webapp2.RequestHandler):
 
         for pic in pictures:
             url = images.get_serving_url(pic.imgkey)
-            url = url + "=s600"
+            url = url + "=s500"
             displayImages.append(url)
             caption.append(pic.caption)
             #print url
@@ -349,7 +349,12 @@ class UploadFromAndroid(blobstore_handlers.BlobstoreUploadHandler):
         print(img_location_long)
         print(img_location_lat)
         email = self.request.params['email']
-        user_photo = Picture(parent=db.Key.from_path('Stream',stream_name),imgkey=str(upload.key()), caption=self.request.params['photoCaption'],loc=db.GeoPt(img_location_lat,img_location_long) )
+        user_photo = Picture(parent=db.Key.from_path('Stream',stream_name),imgkey=str(upload.key()), loc=db.GeoPt(img_location_lat,img_location_long) )
+        caption=self.request.params['photoCaption']
+        if caption != None:
+            user_photo.caption = caption
+
+
         print(user_photo.loc)
         user_photo.put()
 

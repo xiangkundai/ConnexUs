@@ -101,6 +101,7 @@ class mySubscribe(webapp2.RequestHandler):
             url = images.get_serving_url(f_pic.imgkey)
             url = url + "=s600"
             displayImages.append(url)
+            print url
 
            # print f_pic.uploaddate
 

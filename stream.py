@@ -10,7 +10,7 @@ from google.appengine.ext import db
 class Stream(ndb.Model):
 
     name=ndb.StringProperty()
-    tag=ndb.StringProperty(repeated=True)
+    tag=ndb.StringProperty(repeated=True,default=None)
     subscribers=ndb.StringProperty(repeated=True)
     url=ndb.StringProperty()
     guesturl=ndb.StringProperty()
