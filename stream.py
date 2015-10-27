@@ -10,7 +10,7 @@ from google.appengine.ext import db
 class Stream(ndb.Model):
 
     name=ndb.StringProperty()
-    tag=ndb.StringProperty(repeated=True)
+    tag=ndb.StringProperty(repeated=True,default=None)
     subscribers=ndb.StringProperty(repeated=True)
     url=ndb.StringProperty()
     guesturl=ndb.StringProperty()
@@ -25,8 +25,12 @@ class Stream(ndb.Model):
     #author=ndb.stringProperty()
 
 class Picture(db.Model):
-    imgkey=db.StringProperty()
+    imgkey = db.StringProperty()
+    caption = db.StringProperty(default="Hi there, I am a picture!")
+    #blob_key = db.BlobKeyProperty()
     uploaddate= db.DateTimeProperty(auto_now_add=True)
+    loc = db.GeoPtProperty(required=True,default=db.GeoPt(0,0))
+
 
 class Global(ndb.Model):
     name=ndb.StringProperty()
@@ -43,4 +47,8 @@ class Count_pic(ndb.Model):
 
 class stream_name_set(ndb.Model):
     name = ndb.StringProperty()
+
+
+
+
 

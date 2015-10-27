@@ -11,7 +11,7 @@ handlers:
   script: trending.application
   #login: required
 
-- url: /autocomplete
+- url: /autocompletecorn
   script: search.application
 
 - url: /autocompletelist
@@ -39,11 +39,10 @@ handlers:
 
 - url: /viewallstreams
   script: view.application
-  login: required
+ # login: required
 
-- url: /search
-  script: search.application
-  login: required
+
+
 
 - url: /showsearch
   script: search.application
@@ -63,6 +62,7 @@ handlers:
 
 - url: /management
   script: management.application
+  login: required
 
 - url: /delstream
   script: management.application
@@ -87,13 +87,40 @@ handlers:
 - url: /subscribe
   script: viewsinglestream.application
 
-- url: /img.*
+- url: /view_photo.*
   script: viewsinglestream.application
   login: required
+
+
+
+
+- url: /viewAllPhotos
+  script: view.application
+
+- url: /mySubscribe
+  script: view.application
+
+- url: /viewSingleStream
+  script: viewsinglestream.application
+
+- url: /getUploadURL
+  script: viewsinglestream.application
+
+- url: /uploadFromAndroid
+  script: viewsinglestream.application
+
+- url: /search
+  script: search.application
+
 
 - url: /.*
   script: login.application
 
+
+
+#- url: /img.*
+ # script: viewsinglestream.application
+  #login: required
 
 libraries:
 - name: webapp2
@@ -102,3 +129,5 @@ libraries:
   version: latest
 - name: jinja2
   version: latest
+
+

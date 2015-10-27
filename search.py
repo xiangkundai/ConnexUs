@@ -42,14 +42,45 @@ class autoComplete(webapp2.RequestHandler):
             name_set.name = stream.name
             name_set.put()
 
+class searchForAndroid(webapp2.RequestHandler):
+    def get(self):
+        search_item = self.request.get("search_item")
+        print(search_item)
+        streams = Stream.query().fetch()
+        nameList = list()
+        cover_list = []
+        stream_list = []
+        for stream in streams:
+            nameList.append(stream.name)
+
+        index = list()
+        for i in xrange(len(nameList)):
+            index.append(LCS(nameList[i], search_item))
+        tmp = zip(index, nameList)
+        tmp.sort(reverse = True)
+            #we only show five most relation streams
+        for i in xrange(len(tmp)):
+            stream = Stream.query(Stream.name==tmp[i][1]).fetch()[0]
+            stream_list.append(stream.name)
+                #self.response.write(stream.numberofpictures)
+            #if stream.numberofpictures > 0:
+             #   pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
+            cover_list.append(stream.coverurl);
+
+        dictPassed = {'streamList':stream_list,'displayCovers':cover_list}
+        jsonObj = json.dumps(dictPassed, sort_keys=True,indent=4, separators=(',', ': '))
+        print('write json')
+        self.response.write(jsonObj)
+
+
 class autoCompleteList(webapp2.RequestHandler):
     def get(self):
         return_list = list()
         name_sets = stream_name_set.query().fetch()
-        print(name_sets)
+        #print(name_sets)
         for name_set in name_sets:
             return_list.append(str(name_set.name))
-           # print (name_set.name)
+            print (name_set.name)
        # return_dic = {"nameList" , return_list}
         self.response.headers['Content-Type'] = 'application/json'
         return_list.sort()
@@ -93,7 +124,7 @@ class showSearch(webapp2.RequestHandler):
                 #self.response.write(stream.numberofpictures)
                 if stream.numberofpictures > 0:
                     pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
-                    key_list.append(pictures[0].key())
+                    key_list.append(pictures[0].imgkey)
 
                 else:
                     key_list.append(0)
@@ -131,9 +162,12 @@ def cxMax(a, b):
     else:
         return b
 
+
+
+
 application = webapp2.WSGIApplication([
-   # ('/search', searchView),
+   ('/search', searchForAndroid),
     ('/showsearch', showSearch),
-    ('/autocomplete',autoComplete),
+    ('/autocompletecorn',autoComplete),
     ('/autocompletelist',autoCompleteList)
 ], debug=True)

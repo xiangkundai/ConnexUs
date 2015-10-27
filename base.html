@@ -116,20 +116,27 @@
         {% block manage %}  <li ><a href="management">Manage</a></li>{% endblock %}
         {% block creat%}        <li><a href="createstream">Create</a></li>{% endblock %}
         {% block view %} <li><a href="viewallstreams">View</a></li>{% endblock %}
-        {% block trending %} <li><a href="trending">Trending</a></li>{% endblock %}
+        {% block trending %} <li><a href="trending">Trend</a></li>{% endblock %}
 
       </ul>
-      <form class="navbar-form navbar-left" role="search" action="/showsearch" method="get">
+    <form class="navbar-form navbar-left" role="search" action="/showsearch" method="get">
         <div class="form-group ui-widget">
           <input type="search" name="searchStream"  class="form-control" placeholder="Search" id="search_word">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      {% block user%}  <ul class="nav navbar-nav navbar-right">
 
-      <li><a href="/">{{user_name}}</a></li>
-    </ul>{% endblock%}
+
+
+
+      <!--<p><a class="btn btn-primary"  role="button">Rebuild</a></p>-->
+
+
+
       <script>
+
+
+
 
         $(document).ready(function (){
 
@@ -138,21 +145,21 @@
 
             $( "#search_word" ).autocomplete({
               source:data
-                      /*function( request, response ) {
-                var matcher = new RegExp(request.term ,"i");
-                var i = 0;
+              /*function( request, response ) {
+               var matcher = new RegExp(request.term ,"i");
+               var i = 0;
                response( $.grep(data, function( item ){
 
-                if( item.search(matcher))
+               if( item.search(matcher))
 
-                // if (matcher.test(item))
-                   i = i +1;
-                 if (i<21&& item.search(matcher))
-                    return true;
-                 else
-                  return false;
+               // if (matcher.test(item))
+               i = i +1;
+               if (i<21&& item.search(matcher))
+               return true;
+               else
+               return false;
                }) );
-              }*/
+               }*/
             });
           });
 
@@ -164,8 +171,15 @@
 
       </script>
 
+      <!--<form action="/autocompletecorn"><button type="submit" class="btn btn-default">Rebuild</button></form>-->
+      {% block user%}  <ul class="nav navbar-nav navbar-right">
+      <li><a href="/">{{user_name}}</a></li>
+    </ul>
+      {% endblock%}
+
 
     </div><!--/.nav-collapse -->
+
   </div>
 </nav>
 

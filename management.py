@@ -31,7 +31,13 @@ class ManagementPage(webapp2.RequestHandler):
             counts=CountViews.query(CountViews.name.IN(dellsts), ancestor=ndb.Key('User', users.get_current_user().nickname())).fetch()
             for stream in streams:
                 pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1",db.Key.from_path('Stream',stream.name))
+                for pic in pictures:
+                    images.delete_serving_url(pic.imgkey)
+                    blobstore.delete(pic.imgkey)
                 db.delete(pictures)
+                pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream.name))
+                ndb.delete_multi(ndb.put_multi(pic_count))
+                #print pic_count
             ndb.delete_multi(ndb.put_multi(streams))
             ndb.delete_multi(ndb.put_multi(counts))
         dellsts=self.request.get_all("status1")
@@ -49,18 +55,30 @@ class ManagementPage(webapp2.RequestHandler):
         streams_1=Stream.query(Stream.author==users.get_current_user()).order(-Stream.creattime).fetch()
         for stream in streams_1:
            pic_count= Count_pic.query(ancestor=ndb.Key('Stream',stream.name)).fetch()[0]
-           picNum_list.append(pic_count.numbers)
+           pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
+          # print (stream.name, pic_count.numbers)
+          # picNum_list.append(pic_count.numbers)
+           picNum_list.append(pictures.count())
         streams = Stream.query().fetch()
         streams_2 = []
         count_list = []
-        if(users.get_current_user()):
-            for stream in streams:
-                if(users.get_current_user().nickname() in stream.subscribers):
-                    count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
-                    streams_2.append(stream)
-                    count_list.append(count.numbers)
         user_name = users.get_current_user().nickname()
+       # url =users.create_login_url('/')
+      #  if(users.get_current_user()):
+            #user_name = users.get_current_user().nickname()
         url = users.create_logout_url('/')
+        for stream in streams:
+            if(users.get_current_user().email()in stream.subscribers):
+                count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
+                pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
+
+                stream.numberofpictures = pictures.count()
+                streams_2.append(stream)
+                count_list.append(count.numbers)
+
+        #else:
+         #   self.redirect(url,permanent=False)
+
         template_values = {
                 'user_name':user_name,
                 'streams_1': streams_1,
@@ -73,10 +91,10 @@ class ManagementPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('management_index.html')
         self.response.write(template.render(template_values))
 
-        if not users.get_current_user():
-            self.redirect('/',permanent=False)
+       #if not users.get_current_user():
 
 
+# no use!!!!!!
 class DeleteStreams(webapp2.RequestHandler):
     def get(self):
         original_url=self.request.headers['Referer']
@@ -85,7 +103,10 @@ class DeleteStreams(webapp2.RequestHandler):
             streams=Stream.query(Stream.name.IN(dellsts), Stream.author==users.get_current_user()).fetch()
             for stream in streams:
                 pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1",db.Key.from_path('Stream',stream.name))
+
+
                 db.delete(pictures)
+
             ndb.delete_multi(ndb.put_multi(streams))
         self.redirect(original_url)
 
