@@ -100,7 +100,7 @@ class mySubscribe(webapp2.RequestHandler):
            # f.get_serving_url()
             caption.append(f_pic.caption)
             url = images.get_serving_url(f_pic.imgkey)
-            url = url + "=s600"
+            url = url + "=s400"
             displayImages.append(url)
             print url
 
@@ -128,7 +128,7 @@ class AndroidViewNearbyPhotos(webapp2.RequestHandler):
             photos = db.GqlQuery("SELECT * FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC" , db.Key.from_path('Stream', stream.name))
             for photo in photos:
                 photoUrl = images.get_serving_url(photo.imgkey)
-                photoUrl = str(photoUrl) + "=s500"
+                photoUrl = str(photoUrl) + "=s400"
 
                 photoDict = {}
                 photoDict["photoServingURL"] = photoUrl

@@ -319,7 +319,7 @@ class viewSingleStreamFromAndroid(webapp2.RequestHandler):
 
         for pic in pictures:
             url = images.get_serving_url(pic.imgkey)
-            url = url + "=s500"
+            url = url + "=s400"
             displayImages.append(url)
             caption.append(pic.caption)
             #print url
