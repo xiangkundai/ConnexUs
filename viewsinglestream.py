@@ -192,7 +192,8 @@ class SubscribeStream(webapp2.RequestHandler):
 
         if users.get_current_user():
             #stream.subscribers.append(users.get_current_user().nickname())
-            stream.subscribers.append(users.get_current_user().email())
+            # users.get_current_user().email() = users.get_current_user().email().lower()
+            stream.subscribers.append(users.get_current_user().email().lower())
         stream.put()
 
         self.redirect(original_url0)
@@ -380,6 +381,14 @@ class UploadFromAndroid(blobstore_handlers.BlobstoreUploadHandler):
         stream.put()
 
 
+class LowerSubscribeList(webapp2.RequestHandler):
+    def get(self):
+        streams = Stream.query()
+        for stream in streams:
+            for i in range(len(stream.subscribers) - 1):
+                stream.subscribers[i] = stream.subscribers[i].lower()
+        self.response.write("Lower Sub Done!")
+
 
 application = webapp2.WSGIApplication([
     ('/upload', Upload),
@@ -392,6 +401,7 @@ application = webapp2.WSGIApplication([
     ('/uploadurlhandler',UploadUrlHandler),
     ('/viewSingleStream',viewSingleStreamFromAndroid),
     ('/getUploadURL',GetUploadURL),
-    ('/uploadFromAndroid',UploadFromAndroid)
+    ('/uploadFromAndroid',UploadFromAndroid),
+    ('/lowerSubscribeList', LowerSubscribeList)
 
 ], debug=True)

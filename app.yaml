@@ -113,6 +113,9 @@ handlers:
 - url: /search
   script: search.application
 
+- url: /lowerSubscribeList
+  script: viewsinglestream.application
+
 
 - url: /.*
   script: login.application

@@ -48,9 +48,13 @@ class viewAllPhotos(webapp2.RequestHandler):
         all_streams=Stream.query().order(-Stream.creattime).fetch()
         cover_url_list = []
         stream_list = []
+        count = 0
         for stream in all_streams:
+            count += 1
             stream_list.append(stream.name)
             cover_url_list.append(stream.coverurl)
+            if count > 15:
+                break
 
         dictPassed = {'displayCovers':cover_url_list, 'streamList':stream_list}
         jsonObj = json.dumps(dictPassed, sort_keys=True,indent=4, separators=(',', ': '))
@@ -75,10 +79,12 @@ class mySubscribe(webapp2.RequestHandler):
         for stream in streams:
             #print "user0: "+user
            # print type(user)
+            print email
             print stream.subscribers
             #print type(stream.subscribers[0])
             if(email in stream.subscribers):
               #  print "user1: "+user
+                print "1"
                 pictures=db.GqlQuery("SELECT *FROM Picture " + "WHERE ANCESTOR IS :1 " +"ORDER BY uploaddate DESC" , db.Key.from_path('Stream',stream.name))
                 for pic in pictures:
                     if len(final_picture) < 16:
@@ -88,10 +94,13 @@ class mySubscribe(webapp2.RequestHandler):
                         continue
                     else:
                    #     print "user3: "+user
+                        print pic.uploaddate
+                        print final_picture[15].uploaddate
                         if pic.uploaddate > final_picture[15].uploaddate:
                             final_picture.pop()
                             final_picture.append(pic)
                             final_picture.sort(key=lambda pic:pic.uploaddate, reverse=True)
+                            print final_picture
 
         final_picture.sort(key=lambda pic:pic.uploaddate, reverse=True)
         for f_pic in final_picture:

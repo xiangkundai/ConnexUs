@@ -68,7 +68,7 @@ class ManagementPage(webapp2.RequestHandler):
             #user_name = users.get_current_user().nickname()
         url = users.create_logout_url('/')
         for stream in streams:
-            if(users.get_current_user().email()in stream.subscribers):
+            if(users.get_current_user().email().lower() in stream.subscribers):
                 count=CountViews.query(CountViews.name==stream.name,ancestor=ndb.Key('User',stream.author_name)).fetch()[0]
                 pictures=db.GqlQuery("SELECT * FROM Picture " +"WHERE ANCESTOR IS :1 "+"ORDER BY uploaddate DESC",db.Key.from_path('Stream',stream.name))
 
